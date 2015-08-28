@@ -7,165 +7,102 @@
 
 #include <stdio.h>
 #include <stdlib.h>
-#include <malloc.h>
-#define N 0
 
-typedef struct{
-    char *nombre;
-    char *apellidos;
+typedef struct {
+    char * nombre;
+    char * apellido;
     int edad;
-    char *telefono;
+    int telefono;
     int cama;
-} Paciente;
+} paciente;
 
-typedef struct{
-    Paciente * paciente;
-} Cama;
-
-void quePacienteEnQueCama(Cama * c, int camas);
-void llegaPaciente (Paciente ** p, Cama ** c, int*, int*);
-int cuantosPacientes(Paciente * p);
-int cuantasCamas(Cama * c);
-void borrar(Paciente ** p, int aBorrar, int * pacientes);
-void verPacientes(Paciente * p, int pacientes);
-void contarCamas(Cama * c, int camas);
-
-int main(int argc, char** argv) {
+int main(int argc, const char * argv[])
+{
     
-
-    Paciente *p;
-    Cama *c;
+    paciente * hospital;
+    paciente * aux;
     
-    int decision = 1;
+    int cantidad = 0;
     
-
-    p=(Paciente*)malloc(0);
-    c=(Cama*)malloc(10 * sizeof(Cama));
-    int camas = 10;
-    int pacientes = 0;
-
-    while(decision){
-        printf("\nSeleccione su opcion: \n1-Llega un paciente\n2-Revisar Cama\n3-Dar de alta por cama\n4-Ver todos los pacientes\n5-Contar camas disponibles\n\n");
+    printf("¿Cuántos pacientes quieres registrar?: ");
+    scanf("%d", &cantidad);
+    
+    hospital = (paciente *) malloc(sizeof(paciente) * cantidad);
+    
+    paciente * final = hospital + cantidad;
+    
+    for (aux = hospital; aux < final; ++aux) {
         
-    
-        scanf("%d", &decision);
+        aux->nombre = (char * ) malloc(sizeof(char) * 25);
         
-        switch(decision){
-            case 1:
-                llegaPaciente(&p, &c, &pacientes, &camas);
-                break;  
-            case 2:
-                quePacienteEnQueCama(c, camas);
-                break;     
-            case 3:
-                darAltaPaciente(&p, &c, &pacientes, &camas);
-                break;
-            case 4:
-                verPacientes(p, pacientes);
-                break;
-            case 5:
-                contarCamas(c,camas);
-                break;
+        printf("Entre el nombre del paciente: ");
+        scanf("%s", aux->nombre);
+        
+        aux->apellido = (char * ) malloc(sizeof(char) * 25);
+        
+        printf("Entre el apellido del paciente: ");
+        scanf("%s", aux->apellido);
+        
+        printf("Entre la edad del paciente: ");
+        scanf("%d", &aux->edad);
+        
+        printf("Entre el telefono del paciente: ");
+        scanf("%d", &aux->telefono);
+        
+    }
+    
+    int masPacientes = 0;
+    
+    printf("Quieres registrar más pacientes. ¿Cuántos?: ");
+    scanf("%d", &masPacientes);
+    
+    if (masPacientes > 0) {
+        hospital = (paciente *) realloc(hospital, sizeof(paciente) * (cantidad + masPacientes));
+        
+        final = hospital + cantidad + masPacientes;
+        
+        for (aux = hospital + cantidad; aux < final; ++aux) {
+            
+            aux->nombre = (char * ) malloc(sizeof(char) * 25);
+        
+            printf("Entre el nombre del paciente: ");
+            scanf("%s", aux->nombre);
+        
+            aux->apellido = (char * ) malloc(sizeof(char) * 25);
+        
+            printf("Entre el apellido del paciente: ");
+            scanf("%s", aux->apellido);
+        
+            printf("Entre la edad del paciente: ");
+            scanf("%d", &aux->edad);
+        
+            printf("Entre el telefono del paciente: ");
+            scanf("%d", &aux->telefono);
+            
         }
-
-    }    
+        
+    }
+    
+    
+    // Mostrar los pacientes
+    printf("\n\n--- Listado de pacientes ---\n\n");
+    for (aux = hospital; aux < final; ++aux) {
+        printf("%25s \t %25s \t %4d \t %4d \t %4d \n",
+               aux->nombre,
+               aux->apellido,
+               aux->edad,
+               aux->telefono,
+               aux->cama);
+    }
+    
+    // Liberar la memoria
+    
+    for (aux = hospital; aux < final; ++aux) {
+        free(aux->nombre);
+        free(aux->apellido);
+    }
+    
+    free(hospital);
+    
     return 0;
-}
-
-
-void llegaPaciente (Paciente ** p, Cama ** c, int* pacientes, int* camas){
-
-    Paciente * aux;;
-    *p = (Paciente *)realloc(*p,(*pacientes+1)*sizeof(Paciente));
-    *pacientes+=1;
-
-    aux = *p + *pacientes - 1;
-
-    (aux)->nombre = malloc(sizeof(char)*10);
-    printf("Ingrese el nombre:\n");
-    scanf("%s", (aux)->nombre);
-    (aux)->apellidos = malloc(sizeof(char)*10);
-    printf("Ingrese el apellido:\n");
-    scanf("%s", (aux)->apellidos);
-    printf("Cual es la edad: \n");
-    scanf("%d", &((aux)->edad));
-    (aux)->telefono = malloc(sizeof(char)*10);
-    printf("Ingrese el telefono:\n");
-    scanf("%s", (aux)->telefono);
-
-    
-    while(1){   
-        Cama * temp2;
-        Cama * temp = *c + *camas;
-        for( temp2 = *c; temp2 < temp; temp2++)   {
-            if(temp2->paciente == NULL){
-                temp2->paciente = aux;
-                 printf("Se agrego el paciente %d a la cama %d\n", (aux - *p), temp2 - *c);
-                aux->cama=temp2-*c;
-                return;
-            }
-        }
-        
-        *c = (Cama *)realloc(*c,(*camas+5)*sizeof(Cama));  
-        printf("No hay suficientes camas, agregando 5 mas...\n");   
-        *camas+=5;   
-
-    }
-
-}
-
-void borrar(Paciente ** p, int aBorrar, int * pacientes){
-    Paciente * temp = (Paciente *)malloc((*pacientes-1)*sizeof(Paciente));
-    memmove(temp, *p, (aBorrar)*sizeof(Paciente));
-    memmove(temp + aBorrar, *p + (aBorrar+1), (*pacientes - aBorrar - 1)*sizeof(Paciente));
-    *pacientes = *pacientes - 1;
-    free (*p);
-    *p = temp;
-    
-}
-
-void quePacienteEnQueCama(Cama * c, int camas){
-    int numero;
-    printf("Que cama quiere ver?\n");
-    scanf("%d", &numero);
-    if(camas-numero > 1){
-        if((c+numero)->paciente == NULL){
-            printf("Esa cama esta vacia\n");
-            return;
-        }
-        printf("El paciente en esta cama es:\nNombre - %s\nApellido - %s\nEdad - %d\nTelefono - %s\n", (c+numero)->paciente->nombre, (c+numero)->paciente->apellidos, (c+numero)->paciente->edad, (c+numero)->paciente->telefono);
-    }
-    else
-        printf("Esa cama no existe\n");
-}
-
-void darAltaPaciente(Paciente ** p, Cama ** c, int * pacientes, int * camas){
-    int numero;
-    printf("Que numero de cama desea dar de alta?\n");
-    scanf("%d", &numero);
-    if(camas-numero>1 & (*c+numero)->paciente != NULL){
-        borrar(p, numero, pacientes);
-        ((*c)+numero)->paciente = NULL;
-    }
-    else
-        printf("Esa cama no tiene paciente o no existe\n");
-}
-
-void verPacientes(Paciente * p, int pacientes){
-    Paciente * inicio = p;
-    Paciente * final = p + pacientes;
-    for( ; p < final; p++)
-    printf("Paciente #%d\n\nNombre - %s\nApellido - %s\nEdad - %d\nTelefono - %s\nCama - %d\n",p - inicio, p->nombre, p->apellidos, p->edad, p->telefono, p->cama);
-}
-
-void contarCamas(Cama * c, int camas){
-    int disponibles = 0;
-    
-    Cama* final = c + camas;
-    for( ; c < final; c++)
-    {
-        if(c->paciente == NULL)
-            disponibles++;
-    }	
-    printf("Camas disponibles: %d\nCamas ocupadas: %d\n", disponibles, camas-disponibles);
 }
