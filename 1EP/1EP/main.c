@@ -139,32 +139,32 @@ trabajador* addtrab(trabajador *trab, edificacion *edi, int * pobtrab, int * pob
     edificacion *edif;
 */
 
-    printf("Ingrese el rol del tripulante. ");
+    printf("Ingrese el rol del trabajador. ");
     scanf("%s",(trip+pobtrab)->rol);
     while(false==0||cancel==0)
     {
-        printf("Ingrese a qué barco pertenece este tripulante.");
+        printf("Ingrese a qué edificacion pertenece este trabajador.");
         scanf("%s",(trip+*pobtrab)->br.nombre);
         for(i=0;i<(*pobedifs);++i)
         {
-            if((edi+i)->tipo == (trab+(*pobtrab))->br.nombre)
+            if((edi+i)->tipo == (trab+(*pobtrab))->br.tipo)
             {
-                if((edi+i)->maxtriupulantes!=(emb+i)->conteo)
+                if((edi+i)->maxtrabajadores!=(emb+i)->conteo)
                 {
                     ++(edi+i)->conteo;
                     false==1;
                 }
                 else
                 {
-                    printf("Este barco ya no cuenta con lugares");
-                    printf("Si desea eliminar este tripulante para agregar primero el barco, oprima 0");
+                    printf("Esta edificacion ya no cuenta con lugares");
+                    printf("Si desea eliminar este trabajador para agregar primero la edificacion, oprima 0");
                     scanf("%d",&cancel);
                     cancel==1;
                 }
             }
             if(i==(pobbar-1))
             {
-                printf("El barco no se encontro, se cancelará este tripulante ");
+                printf("La edificacion no se encontro, se cancelará este trabajador ");
                 cancel==1;
                 break;
             }
