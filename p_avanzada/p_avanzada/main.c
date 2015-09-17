@@ -31,6 +31,8 @@ struct Person *Person_create(char *name, int age, int height, int weight)
     return who;
 }
 
+
+
 void Person_destroy(struct Person *who)
 {
     assert(who != NULL);
@@ -54,6 +56,15 @@ int main(int argc, char *argv[])
     
     struct Person *frank = Person_create("Frank Blank", 20, 72, 180);
     
+    struct Person* arreglo = (struct Person*)malloc(3*(sizeof(struct Person)));
+    int edad=0;
+    int heigth=0;
+    int weight =0;
+    
+    *(arreglo)=*Person_create("p1", edad, heigth, weight);
+    *(arreglo+1)=*Person_create("p2", edad, heigth, weight);
+    *(arreglo+2)=*Person_create("p3", edad, heigth, weight);
+    
     // print them out and where they are in memory
     printf("Joe is at memory location %p:\n", joe);
     Person_print(joe);
@@ -74,6 +85,11 @@ int main(int argc, char *argv[])
     // destroy them both so we clean up
     Person_destroy(joe);
     Person_destroy(frank);
+    
+    printf("con aa\n");
+    Person_print(arreglo);
+    Person_print((arreglo+1));
+    Person_print((arreglo+2));
     
     return 0;
 }
