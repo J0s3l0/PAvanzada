@@ -49,10 +49,12 @@ trabajador* addtrab(trabajador* trab, edificacion* edi, int * pobtrab, int * pob
 edificacion* addedificacion(edificacion* edi, int * pobtrab, int * pobedifs);
 void printtrab(trabajador* trab, int * pobtrab);
 void printedifs(edificacion* edi, trabajador* trab, int * pobedifs, int * pobtrab);
+//void buscarporfecha_t(trabajador * edi, char * fechas, int id, int * pobtrab)
 
 
 int main(int argc, const char * argv[]) {
-    int op=0;
+    int op=0, id = 0;
+    char * fecha = (char *)malloc(sizeof(char) * R);
     int init         = 1;
     int * pobtrab    = &init;
     int * pobedifs   = &init;
@@ -92,13 +94,40 @@ int main(int argc, const char * argv[]) {
                 printtrab(trab, pobtrab);
                 break;
             case 5:
-                printf("Finalizando programa. Gracias por utilizarlo.");
+                printf("Finalizando menu. Gracias por utilizarlo.");
                 break;
             default:
                 printf("Opcion no valida, favor de ingresar otra opción");
                 break;
         }
     }
+    
+    /*
+    if(!fork()){
+        //proceso hijo
+        printf("Ver los modelos por numero de nomina\n");
+        scanf("%d",&id);
+        printf("Fecha en la que desea buscar formato dd-mm-yy\n");
+        scanf("%s",fecha);
+        buscarporfecha_t(edi,fecha,id, pobedifs);
+        
+        exit(0);
+    }
+    else{
+        //proceso padre
+        wait(0);
+        
+        printf("Ver los modelos por numero de nomina\n");
+        scanf("%d",&id);
+        printf("Fecha en la que desea buscar formato dd-mm-yy\n");
+        scanf("%s",fecha);
+        buscarporfecha_t(edi,fecha,id, pobedifs);
+
+    }*/
+    
+    
+    
+    free(fecha);
     free(edi);
     free(trab);
     return (EXIT_SUCCESS);
@@ -307,6 +336,31 @@ edificacion* addedificacion(edificacion *edi, int * pobtrab, int * pobedifs){
     
     return edi;
 }
+
+
+/*
+void buscarporfecha_t(trabajador * edi, char * fechas, int id, int * pobtrab){
+    //edificacion* aux = edi;
+    trabajador * aux2 = trab;
+    int i =0;
+    while(i < (*pobtrab))
+    {
+        if(aux2->fecha == fechas && aux2->num_nomina == id)
+        {
+            if(aux2->type ==1)
+            {
+                printf("una torre de : %d pisos\n", aux2->torre->pisos);
+            }else if(aux2->type ==2){
+                printf("una torre de : 1 pisos\n");
+            }else if(aux2->type ==3){
+                printf("una torre de : %d pisos\n", aux2->edificio->pisos);
+            }
+        }
+        i++;
+        if(i<c)
+        {aux++;}
+    }
+}*/
 
 
 void printtrab(trabajador *trab, int * pobtrab )
