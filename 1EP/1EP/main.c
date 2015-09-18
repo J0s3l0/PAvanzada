@@ -15,6 +15,7 @@
 #define O 400
 #define P 100
 #define D 16
+#define R 10
 
 
 //Declaracion de Estructuras
@@ -56,22 +57,22 @@ int main(int argc, const char * argv[]) {
     int * pobtrab    = &init;
     int * pobedifs   = &init;
     
-    edificacion *edi = (edificacion *)malloc(sizeof(edificacion)); //variable donde se guardaran todas las edificaciones
+    edificacion *edi = (edificacion *)malloc(sizeof(edificacion) * R); //variable donde se guardaran todas las edificaciones
     
-    char * inicio    = (char *)malloc( sizeof(char)* L);
-    strcpy(inicio,"Para iniciar se agregará una edificación a la BD.\nEsto para agregar trabajadores a alguna edificación.\n");
-    printf("%s",inicio);
+    //char * inicio    = (char *)malloc( sizeof(char)* L);
+    //strcpy(inicio,"Para iniciar se agregará una edificación a la BD.\nEsto para agregar trabajadores a alguna edificación.\n");
+    //printf("%s",inicio);
     
-    edi              = addedificacion(edi, pobtrab, pobedifs);
+    //edi              = addedificacion(edi, pobtrab, pobedifs);
     
-    trabajador *trab = (trabajador *)malloc(sizeof(trabajador)); // variable donde se guardaran los trabajadores
-    strcpy(inicio,"Ahora se asignará el espacio para el primer trabajador a la primera edificación.\n");
-    printf("%s",inicio);
+    trabajador *trab = (trabajador *)malloc(sizeof(trabajador) * R); // variable donde se guardaran los trabajadores
+    //strcpy(inicio,"Ahora se asignará el espacio para el primer trabajador a la primera edificación.\n");
+    //printf("%s",inicio);
     
-    trab=addtrab(trab, edi, pobtrab, pobedifs);
+    //trab=addtrab(trab, edi, pobtrab, pobedifs);
     
     char * menu = (char *)malloc(sizeof(char)* O);
-    strcpy(menu,"\n::::\tMenu Principal\t::::\n1. Nueva Edificación\n2. Nuevo trabajador\n3. Visualizar Edificaciones con trabajadores\n4.Visualizar trabajadores\n5. Salir\n\nFavor de ingresar una opción.\n");
+    strcpy(menu,"\n::::\tMenu Principal\t::::\n1. Nueva Edificación\n2. Nuevo trabajador\n3. Visualizar Edificaciones con trabajadores\n4.Visualizar trabajadores\n5. Salir\n\nFavor de ingresar una opción: ");
     
     while(op!=5){
         printf("%s",menu);
@@ -105,10 +106,13 @@ int main(int argc, const char * argv[]) {
 
 
 trabajador* addtrab(trabajador *trab, edificacion *edi, int * pobtrab, int * pobedifs){
-    int i, falso=0, cancel=0;
+
     trabajador * temp;
     temp = trab;
-    temp = (trabajador *)realloc(trab, sizeof(trabajador)*(*pobtrab));
+    
+    int nuevot = (*pobtrab) + D;
+    temp = (trabajador *)realloc(trab, nuevot * sizeof(trabajador));
+    
     if(temp == NULL){
         printf("Lo sentimos, ya no hay memoria para agregar trabajadores.");
         return trab;
@@ -143,7 +147,7 @@ trabajador* addtrab(trabajador *trab, edificacion *edi, int * pobtrab, int * pob
     printf("Ingrese el nombre del puesto del trabajador [Ing. Civil, Arquitecto, Técnico, Operador]: ");
     scanf("%s",(trab + (*pobtrab))->puesto);
 
-    
+    /*
     while(falso == 0 || cancel==0){
         ((trab + (*pobtrab))->edif.nombre) = (char * ) malloc(sizeof(char) * N);
         printf("Ingrese el nombre de la edificacion a la que pertenece este trabajador: ");
@@ -179,15 +183,23 @@ trabajador* addtrab(trabajador *trab, edificacion *edi, int * pobtrab, int * pob
         trab = (trabajador *)realloc(trab, sizeof(trabajador)*(*pobtrab-1));
         return trab;
     }
+     */
     ++(*pobtrab);
+    printf("Poblacion Trabajadores: %d ", *pobtrab);
     return trab;
 }
 
 
 edificacion* addedificacion(edificacion *edi, int * pobtrab, int * pobedifs){
+    printf("Poblacion Edificaciones: %d ", *pobedifs);
+    printf("Poblacion Trabajadores: %d ", *pobtrab);
+    printf("\n");
+    
     edificacion * temp;
     temp = edi;
-    temp = (edificacion *)realloc(edi, sizeof(edificacion) * (*pobedifs));
+    
+    int nuevot = (*pobedifs) + R;
+    temp = (edificacion *)realloc(edi, nuevot * sizeof(edificacion));
     
     if(temp == NULL){
         printf("Lo sentimos, ya no hay memoria para agregar edificaciones.");
@@ -196,6 +208,7 @@ edificacion* addedificacion(edificacion *edi, int * pobtrab, int * pobedifs){
     
     edi = temp;
     free(temp);
+    
     
     (edi + (*pobedifs))->nombre = (char * ) malloc(sizeof(char) * N);
     printf("Ingrese el nombre de la edificacion: ");
@@ -277,44 +290,73 @@ edificacion* addedificacion(edificacion *edi, int * pobtrab, int * pobedifs){
         ((edi + (*pobedifs))->ad_torres) = 0;
     }
     
-    ((edi + (*pobedifs))->ing_respon) = 0;
+    if((*pobtrab)-1 != 0 ){
+        printf("Ingrese el número de nómina del ingeniero o responsable a cargo: ");
+        scanf("%d", &((edi + (*pobedifs))->ing_respon));
+    }else{
+        ((edi + (*pobedifs))->ing_respon) = 0;
+    }
     
     free(tipo);
     
-    ++(*pobedifs);
+    *pobedifs = (*pobedifs)+1;
+     printf("Poblacion Edificaciones: %d ", *pobedifs);
+     printf("Poblacion Trabajadores: %d ", *pobtrab);
+     printf("\n");
+    
+    
     return edi;
 }
 
 
 void printtrab(trabajador *trab, int * pobtrab )
 {
-    int i;
-    for(i = 0; i < (*pobtrab); ++i)
-    {
-        printf("El trabajador se llama: %s %s\n",(trab+i)->nombre,(trab+i)->apellidos);
-        printf("El número de nómina es: %d\n",(trab+i)->num_nomina);
-        printf("El puesto del tripulante es: %s\n",(trab+i)->puesto);
-        printf("Edificaciones a la que pertence es: %s\n\n",(trab+i)->edif.nombre);
+    if((*pobtrab-1) != 0){
+        int i;
+        for(i = 0; i < (*pobtrab); ++i){
+            printf("El trabajador se llama: %s %s\n",(trab+i)->nombre,(trab+i)->apellidos);
+            printf("El número de nómina es: %d\n",(trab+i)->num_nomina);
+            printf("El puesto del tripulante es: %s\n",(trab+i)->puesto);
+            printf("Edificaciones a la que pertence es: %s\n\n",(trab+i)->edif.nombre);
+        }
+    }else{
+        printf("No existen trabajadores guardados");
     }
+    
+    printf("\n\n");
+    
     return;
 }
 
 void printedifs(edificacion * edi, trabajador *trab, int * pobedifs, int * pobtrab){
     
-    int i, j;
-    for(i = 0; i < (*pobedifs); ++i){
+    if((*pobtrab -1) != 0){
+    
+     int i, j;
+     for(i = 0; i < (*pobedifs); ++i){
         printf("El nombre del barco es: %s\n",(edi+i)->nombre);
         printf("El tipo de edificación es: %s\n",(edi+i)->tipo);
         printf("Los valores modales son:\n");
-        for( j = 0; j < (edi+i)->niveles; ++j){
+        int temp = (edi+i)->niveles;
+        for( j = 0; j < temp; ++j){
             printf("Valor Modal %d.- %d",j+1,*(edi + i)->val_modales+j);
         }
         printf("El máximo número de trabajadores de la edificación es: %d\n",(edi+i)->maxtrabajadores);
         printf("La edificación lleva %d puestos asignados, los trabajadores son:\n",(edi+i)->conteo);
-        for( j = 0; j < (*pobtrab); ++j){
-            if((trab + j)->edif.nombre == (edi + i)->nombre)
-                printf("%d.- %s %s",j+1,(trab + j)->nombre,(trab + j)->apellidos);
+        if((edi+i)->conteo == 0){
+            printf("No existen trabajadores en esta edificacion");
+        }else if((edi+i)->conteo >1){
+            for( j = 0; j < (*pobtrab); ++j){
+                if((trab + j)->edif.nombre == (edi + i)->nombre)
+                    printf("%d.- %s %s",j+1,(trab + j)->nombre,(trab + j)->apellidos);
+            }
         }
+        
+     }
+    }else{
+        printf("No existen edificaciones guardadas");
     }
+    
+    printf("\n\n");
     return;
 }

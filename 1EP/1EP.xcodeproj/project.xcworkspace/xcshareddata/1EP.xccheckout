@@ -7,14 +7,14 @@
 	<key>IDESourceControlProjectIdentifier</key>
 	<string>7E32D20B-0E9A-4C97-A956-C22B5382E2F8</string>
 	<key>IDESourceControlProjectName</key>
-	<string>project</string>
+	<string>1EP</string>
 	<key>IDESourceControlProjectOriginsDictionary</key>
 	<dict>
 		<key>F80DA6AED69FD779A7C9B0FBA46EDB1AEA34C5D5</key>
 		<string>https://github.com/J0s3l0/PAvanzada.git</string>
 	</dict>
 	<key>IDESourceControlProjectPath</key>
-	<string>1EP/1EP.xcodeproj/project.xcworkspace</string>
+	<string>1EP/1EP.xcodeproj</string>
 	<key>IDESourceControlProjectRelativeInstallPathDictionary</key>
 	<dict>
 		<key>F80DA6AED69FD779A7C9B0FBA46EDB1AEA34C5D5</key>
