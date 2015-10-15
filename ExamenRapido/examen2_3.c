@@ -11,7 +11,6 @@
 #define SEGUNDOS 3
 
 void crearDirectorio();
-void comprobarDirectorio();
 void gestorAlarma();
 void mostrarFicheros();
 
@@ -29,7 +28,6 @@ int main(int argc, char **argv)
     sigdelset(&todas, SIGALRM);
     sigprocmask(SIG_BLOCK, &todas, NULL);
 	
-	comprobarDirectorio();
 	signal(SIGALRM, gestorAlarma);
 	
 	
@@ -38,7 +36,6 @@ int main(int argc, char **argv)
 		strcpy(cadena, directorio);
 		strcat(cadena, "/a");
 		sprintf(cadena, "%s%d", cadena, i);
-		//printf("SE va a crear el archivo %s\n", cadena);
 		grabar = 1;
 		
 		archivo = fopen(cadena, "w");
