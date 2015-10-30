@@ -58,6 +58,20 @@ int main(int argc, char** argv[]){
         pthread_join(thread_id[i],NULL);
 	}
 	
+
+    for(i = 0; i < ENTRADAS; ++i){
+		sem_destroy(&SemSalidas[i]);
+	}
+	
+	for(i = 0; i < SALIDAS; ++i){
+		sem_destroy(&SemSalidas[i]);
+	}
+	sem_destroy(&SemLugares);
+	sem_destroy(&SemRobots);
+	sem_destroy(&critica);
+	
+	pthread_exit(NULL);
+	
 	return 0;
 }
 
